@@ -6,20 +6,17 @@ class Employee {
     this.email = email;
   }
   getName() {
-      console.log(this.name);
+    return(this.name);
   }
-  getId(){
-      console.log(this.id);
+  getId() {
+    return(this.id);
   }
-  getEmail(){
-      console.log(this.email)
+  getEmail() {
+    return(this.email);
   }
-  getRole(role){
-     
+  getRole() {
+      return("Employee");
   }
 }
 
-// * getName()
-// * getId()
-// * getEmail()
-// * getRole()
+module.exports = Employee;
