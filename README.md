@@ -18,12 +18,13 @@ Clone the repository from GitHub, run npm install, and run the app.js applicatio
 
 This project is comprised of multiple HTML and JS files to create an HTML team profile page with generated team members
 
-![CLI]()
+![CLI](Assets/cliPrompts.png)
 
-![GeneratedHTML]()
+![GeneratedHTML](Assets/generatedHTML.png)
 
-![VideoWalkThrough]()
+![CLIWalkThrough](Assets/teamCLI.gif)
 
+![GeneratedHTML](Assets/cliHTML.gif)
 
 
 
