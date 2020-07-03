@@ -9,77 +9,96 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-const team = []
+const team = [];
 
-function addTeamMember (){
-    inquirer.prompt([
-        {
+function addTeamMember() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter the team members name.",
+        name: "memberName",
+      },
+      {
+        type: "list",
+        message: "Select the team members role",
+        choices: ["Manager", "Engineer", "Intern"],
+        name: "memberTitle",
+      },
+      {
+        type: "input",
+        message: "Enter the employee ID",
+        name: "memberId",
+      },
+      {
+        type: "input",
+        message: "Enter the employee email",
+        name: "employeeEmail",
+      },
+    ])
+    .then(function ({ memberName, memberTitle, memberId, employeeEmail }) {
+      let roleInfo = "";
+      if (memberTitle === "Manager") {
+        roleInfo = "office number";
+      } else if (memberTitle === "Engineer") {
+        roleInfo = "GitHub Name";
+      } else {
+        roleInfo = "name of School";
+      }
+      inquirer
+        .prompt([
+          {
             type: "input",
-            message: "Enter the team members name.",
-            name: "memberName"
-        },
-        {
+            message: `Please enter the team members ${roleInfo}`,
+            name: "roleInformation",
+          },
+          {
             type: "list",
-            message: "Select the team members role",
-            choices: ["Manager", "Engineer", "Intern"],
-            name: "memberTitle"
-        },
-        {
-            type: "input",
-            message: "Enter the employee ID",
-            name: "memberId"
-        },
-        {
-            type: "input",
-            message: "Enter the employee email",
-            name: "employeeEmail"
-        }
-    ]).then(function({memberName, memberTitle, memberId, employeeEmail}){
-        let roleInfo = ""
-        if(memberTitle === "Manager"){
-            roleInfo = "office number"
-        }else if( memberTitle === "Engineer"){
-            roleInfo = "GitHub Name"
-        }else{
-            roleInfo = "name of School"
-        }
-        inquirer.prompt([
-            {
-                type: "input",
-                message: `Please enter the team members ${roleInfo}`,
-                name: "roleInformation"
-            },
-            {
-                type: "list",
-                message: "Would you like to add another team member?",
-                choices: ["Yes", "No"],
-                name: "anotherTeamMember"
-            }
-        ]).then(function({roleInformation, anotherTeamMember}){
-            let newTeamMember;
-            if(memberTitle === "Manager"){
-                newTeamMember = new Manager(memberName, memberId, employeeEmail, roleInformation)
-            } else if(memberTitle === "Engineer"){
-                newTeamMember = new Engineer(memberName, memberId, employeeEmail, roleInformation)
-            }else{
-                newTeamMember = new Intern(memberName, memberId, employeeEmail, roleInformation)
-            } 
-            team.push(newTeamMember)
-                if(anotherTeamMember === "Yes"){
-                    addTeamMember();
-                }else{
-                    //call html renderer here
-                    console.log(team);
-                }
-        })
+            message: "Would you like to add another team member?",
+            choices: ["Yes", "No"],
+            name: "anotherTeamMember",
+          },
+        ])
+        .then(function ({ roleInformation, anotherTeamMember }) {
+          let newTeamMember;
+          if (memberTitle === "Manager") {
+            newTeamMember = new Manager(
+              memberName,
+              memberId,
+              employeeEmail,
+              roleInformation
+            );
+          } else if (memberTitle === "Engineer") {
+            newTeamMember = new Engineer(
+              memberName,
+              memberId,
+              employeeEmail,
+              roleInformation
+            );
+          } else {
+            newTeamMember = new Intern(
+              memberName,
+              memberId,
+              employeeEmail,
+              roleInformation
+            );
+          }
+          team.push(newTeamMember);
+          if (anotherTeamMember === "Yes") {
+            addTeamMember();
+          } else {
+            render(team);
+            console.log(team);
+          }
+          fs.writeFile(outputPath, JSON.stringify(team), function(err){
+            if(err) throw(err);
+            console.log("worked")
+          });
+        });
     });
-    
 }
 
 addTeamMember();
-
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
